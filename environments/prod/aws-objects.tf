@@ -116,15 +116,6 @@ resource "aws_network_interface" "private-3" {
   }
 }
 
-# resource "aws_eip" "public_ip" {
-#   domain = "vpc"
-# }
-
-# resource "aws_eip_association" "eip_attach" {
-#   allocation_id        = aws_eip.public_ip.id
-#   network_interface_id = aws_network_interface.public.id
-# }
-
 resource "aws_instance" "node-1" {
   depends_on    = [aws_security_group.EC2-CE-sg-SLI]
   ami           = var.ami
@@ -150,9 +141,9 @@ resource "aws_instance" "node-1" {
     "kubernetes.io/cluster/p-kuligowski-aws-smsv2-tf" = "owned"
   }
   lifecycle {
-   ignore_changes = [user_data]
- }
-} 
+    ignore_changes = [user_data]
+  }
+}
 
 resource "aws_instance" "node-2" {
   depends_on    = [aws_security_group.EC2-CE-sg-SLI]
@@ -178,10 +169,10 @@ resource "aws_instance" "node-2" {
     Name                                              = "${var.prefix}-node-2"
     "kubernetes.io/cluster/p-kuligowski-aws-smsv2-tf" = "owned"
   }
-    lifecycle {
-   ignore_changes = [user_data]
- }
-} 
+  lifecycle {
+    ignore_changes = [user_data]
+  }
+}
 
 resource "aws_instance" "node-3" {
   depends_on    = [aws_security_group.EC2-CE-sg-SLI]
@@ -207,7 +198,7 @@ resource "aws_instance" "node-3" {
     Name                                              = "${var.prefix}-node-3"
     "kubernetes.io/cluster/p-kuligowski-aws-smsv2-tf" = "owned"
   }
-    lifecycle {
-   ignore_changes = [user_data]
- }
+  lifecycle {
+    ignore_changes = [user_data]
+  }
 } 
