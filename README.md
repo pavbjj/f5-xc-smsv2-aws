@@ -26,7 +26,7 @@ flowchart TD
 ## Existing VPC and subents
 The project requires an existing VPC and subnets; SLO (Outside) and SLI (Inside)
 
-## Intra node connectivity
+## Intra-node connectivity
 The traffic is allowed between CE nodes
 
 ## Egress connectivity for Data and Management Planes
