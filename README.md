@@ -39,7 +39,7 @@ All traffic is allowed to F5 XC cloud: https://docs.cloud.f5.com/docs/reference/
 | F5 XC JWT tokens      |JWT tokens used for registration|
 | Virtual Site          |XC clustering               |
 | AWS VM nodes        |AWS Instances             |
-| AWS NLB             |AWS Network Load Balancer |
+| AWS NLB             |AWS Network Load Balancer (Optional) |
 
 # High-Level
 ## Creation order
