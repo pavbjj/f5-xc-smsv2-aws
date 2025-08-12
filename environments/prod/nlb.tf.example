@@ -1,0 +1,101 @@
+# Variables for your instance IDs (replace with your real ones or data sources)
+variable "outside_instance_ids" {
+  type    = list(string)
+  default = ["i-06bee433e8fa526f7", "i-049f9e037eec3ae84", "i-084f08b3bb006e567"]
+}
+
+# Internal Network Load Balancer
+resource "aws_lb" "p_kuligowski_tf_internal_nlb" {
+  name               = "p-kuligowski-tf-internal-nlb"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = values(aws_subnet.p_kuligowski_tf_outside_subnets)[*].id
+
+  tags = {
+    Name = "p-kuligowski-tf-internal-nlb"
+  }
+}
+
+# Target group for port 80
+resource "aws_lb_target_group" "p_kuligowski_tf_tg_80" {
+  name        = "p-kuligowski-tf-tg-80"
+  port        = 80
+  protocol    = "TCP"
+  vpc_id      = aws_vpc.p_kuligowski_tf_vpc.id
+  target_type = "instance"
+
+  health_check {
+    port               = "80"
+    protocol           = "TCP"
+    healthy_threshold  = 3
+    unhealthy_threshold = 3
+    timeout            = 5
+    interval           = 30
+  }
+
+  tags = {
+    Name = "p-kuligowski-tf-tg-80"
+  }
+}
+
+# Target group for port 443
+resource "aws_lb_target_group" "p_kuligowski_tf_tg_443" {
+  name        = "p-kuligowski-tf-tg-443"
+  port        = 443
+  protocol    = "TCP"
+  vpc_id      = aws_vpc.p_kuligowski_tf_vpc.id
+  target_type = "instance"
+
+  health_check {
+    port               = "443"
+    protocol           = "TCP"
+    healthy_threshold  = 3
+    unhealthy_threshold = 3
+    timeout            = 5
+    interval           = 30
+  }
+
+  tags = {
+    Name = "p-kuligowski-tf-tg-443"
+  }
+}
+
+# Register instances in target groups port 80
+resource "aws_lb_target_group_attachment" "p_kuligowski_tf_tg_attach_80" {
+  for_each        = toset(var.outside_instance_ids)
+  target_group_arn = aws_lb_target_group.p_kuligowski_tf_tg_80.arn
+  target_id        = each.key
+  port             = 80
+}
+
+# Register instances in target groups port 443
+resource "aws_lb_target_group_attachment" "p_kuligowski_tf_tg_attach_443" {
+  for_each        = toset(var.outside_instance_ids)
+  target_group_arn = aws_lb_target_group.p_kuligowski_tf_tg_443.arn
+  target_id        = each.key
+  port             = 443
+}
+
+# Listener on port 80
+resource "aws_lb_listener" "p_kuligowski_tf_listener_80" {
+  load_balancer_arn = aws_lb.p_kuligowski_tf_internal_nlb.arn
+  port              = 80
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.p_kuligowski_tf_tg_80.arn
+  }
+}
+
+# Listener on port 443
+resource "aws_lb_listener" "p_kuligowski_tf_listener_443" {
+  load_balancer_arn = aws_lb.p_kuligowski_tf_internal_nlb.arn
+  port              = 443
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.p_kuligowski_tf_tg_443.arn
+  }
+}
