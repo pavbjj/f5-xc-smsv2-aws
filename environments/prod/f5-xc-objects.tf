@@ -13,8 +13,41 @@ resource "volterra_securemesh_site_v2" "node-1" {
   re_select {
     geo_proximity = true
   }
-  aws {
-    not_managed {}
+aws {
+    not_managed {
+      node_list {
+          # Node Identifier
+          hostname = "ip-${replace(aws_network_interface.public-1.private_ip, ".", "-")}"
+          type     = "Control"
+      interface_list {
+        ethernet_interface {
+          device = "ens5"
+          mac = ""
+        }
+          name = "ens5"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_network = true          
+        
+          }
+      }
+      interface_list {
+          ethernet_interface {
+          device = "ens6"
+          mac = ""
+        }
+          name = "ens6"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_inside_network = true          
+          }
+      }
+      }
+    }    
   }
   lifecycle {
     ignore_changes = [labels]
@@ -68,8 +101,44 @@ resource "volterra_securemesh_site_v2" "node-2" {
   re_select {
     geo_proximity = true
   }
-  aws {
-    not_managed {}
+ aws {
+    not_managed {
+      node_list {
+          # Node Identifier
+          hostname = "ip-${replace(aws_network_interface.public-1.private_ip, ".", "-")}"
+
+          type     = "Control"
+
+      interface_list {
+        ethernet_interface {
+          device = "ens5"
+          mac = ""
+        }
+          name = "ens5"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_network = true          
+        
+          }
+      }
+      interface_list {
+  
+          ethernet_interface {
+          device = "ens6"
+          mac = ""
+        }
+          name = "ens6"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_inside_network = true          
+          }
+      }
+      }
+    }    
   }
   lifecycle {
     ignore_changes = [labels]
@@ -123,8 +192,44 @@ resource "volterra_securemesh_site_v2" "node-3" {
   re_select {
     geo_proximity = true
   }
-  aws {
-    not_managed {}
+ aws {
+    not_managed {
+      node_list {
+                  # Node Identifier
+          hostname = "ip-${replace(aws_network_interface.public-1.private_ip, ".", "-")}"
+
+          type     = "Control"
+
+      interface_list {
+        ethernet_interface {
+          device = "ens5"
+          mac = ""
+        }
+          name = "ens5"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_network = true          
+        
+          }
+      }
+      interface_list {
+  
+          ethernet_interface {
+          device = "ens6"
+          mac = ""
+        }
+          name = "ens6"
+          dhcp_client = true
+          mtu = 0
+          priority = 0
+          network_option {
+            site_local_inside_network = true          
+          }
+      }
+      }
+    }    
   }
   lifecycle {
     ignore_changes = [labels]
