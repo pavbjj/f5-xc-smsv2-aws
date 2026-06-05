@@ -6,6 +6,7 @@ resource "volterra_securemesh_site_v2" "node-1" {
   block_all_services      = true
   logs_streaming_disabled = true
   enable_ha               = false
+  no_forward_proxy        = true
   labels = {
     "ves.io/provider" = "ves-io-AWS"
     "vsite"           = "${var.prefix}-aws-site"
@@ -94,6 +95,7 @@ resource "volterra_securemesh_site_v2" "node-2" {
   block_all_services      = true
   logs_streaming_disabled = true
   enable_ha               = false
+  no_forward_proxy        = true
   labels = {
     "ves.io/provider" = "ves-io-AWS"
     "vsite"           = "${var.prefix}-aws-site"
@@ -185,6 +187,7 @@ resource "volterra_securemesh_site_v2" "node-3" {
   block_all_services      = true
   logs_streaming_disabled = true
   enable_ha               = false
+  no_forward_proxy        = true
   labels = {
     "ves.io/provider" = "ves-io-AWS"
     "vsite"           = "${var.prefix}-aws-site"
